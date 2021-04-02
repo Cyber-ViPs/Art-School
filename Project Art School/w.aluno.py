@@ -1,4 +1,4 @@
-from cadastrar import Aluno
+from cadastrar import Aluno:
 
 aluno1 = Aluno()
 nome ="Jessica"
