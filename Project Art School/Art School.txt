@@ -1,0 +1,12 @@
+Controle de aluno EU
+registra , consultar e altera
+
+xenri e manuel (controle de alunos)
+xIhuri e felipe. (controle de disciplinas)
+weliton e kesio (registro das notas do aluno por disciplina)
+
+
+
+Desenvolver um sistema para controlar o registro de notas das disciplinas de um professor. Deve ter o controle de alunos, o controle de disciplinas e o registro das notas do aluno por disciplina.
+
+20h30

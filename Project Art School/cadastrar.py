@@ -8,3 +8,4 @@ class Aluno:
 
     def media(self):
       return  media(self.av1+self.av2)/2
+
