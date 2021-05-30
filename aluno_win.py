@@ -44,7 +44,7 @@ class Alunowin:
         
 
         self.buscaEdit = tk.Entry(width=85, bd=1,bg='#dde')
-        self.buscaEdit.insert(0, 'Digite sua Matrica')
+        self.buscaEdit.insert(0, 'Digite sua Matricula')
         self.buscaEdit.configure(state=DISABLED)
         self.buscaEdit.bind('<Button-1>', self._on_click)
         
@@ -215,7 +215,7 @@ class Alunowin:
         self.buscaEdit.delete(0, tk.END)
         
         self.alunoList.insert('','end',values=(str(id),nome,idade,cpf,matricula,email,endereco))
-        self.buscaEdit.insert(0, 'Digite sua Matrica')
+        self.buscaEdit.insert(0, 'Digite sua Matricula')
         self.buscaEdit.configure(state=DISABLED)
         self.buscaEdit.bind('<Button-1>', self._on_click)    
        
