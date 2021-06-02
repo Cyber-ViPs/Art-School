@@ -3,7 +3,7 @@ from tkinter.font import BOLD, Font
 from typing import ItemsView, Sized
 from aluno import Aluno
 from PIL import Image, ImageTk
-from tkinter import tix
+from tkinter import Event, Tk, tix
 import tkinter as tk
 from tkinter import BitmapImage, Image, Label, ttk
 from tkinter import messagebox as mb
@@ -47,6 +47,7 @@ class Alunowin:
         self.buscaEdit.insert(0, 'Digite sua Matricula')
         self.buscaEdit.configure(state=DISABLED)
         self.buscaEdit.bind('<Button-1>', self._on_click)
+        self.buscaEdit.bind("<Return>",(lambda Event: self.buscar(self.buscaEdit.get())))
         
         #------------#
         # botoes s
@@ -55,7 +56,7 @@ class Alunowin:
         text='Lista',bg='#dde',command=self.carregar_dados_iniciais_treeView, bd=0)
         
         self.btnbusca = tk.Button(win, 
-        text='Busca',bg='#dde',command=self.buscar, bd=0)
+        text='Busca',bg='#dde',command=(lambda : self.buscar(self.buscaEdit.get())), bd=0)
         
         
 
@@ -88,7 +89,7 @@ class Alunowin:
       
         
 
-        self.alunoList.column(1, minwidth=0, width=30)
+        self.alunoList.column(1, minwidth=0, width=0)
         self.alunoList.column(2, minwidth=0, width=200)
         self.alunoList.column(3, minwidth=0, width=45)
         self.alunoList.column(4, minwidth=0, width=100)
@@ -133,7 +134,7 @@ class Alunowin:
         self.btnCadastrar.place(x=670,y=250)
         self.btnAlterar.place(x=600,y=250)
         self.btnExcluir.place(x=530,y=250)
-        self.alunoList.place(x=45,y=330)
+        self.alunoList.place(x=70,y=330)
         self.verscrlbar.place(x=880,y=330, height=230)
 
         self.carregar_dados_iniciais_treeView()
@@ -145,8 +146,10 @@ class Alunowin:
     def _on_click(self, event):
         self.buscaEdit.configure(state=NORMAL)
         self.buscaEdit.delete(0, END)
-        self.buscaEdit.unbind('<Button-1>',self._on_click)
-
+        janela.unbind('<Button-1>')
+        #fazendo unbind com root da janela especificando exatamente qual
+        # a funçao deve ser realizada o unbind nao teremos o erro de string
+       
     
 
     def _on_mostrar_clicked(self, event):
@@ -190,7 +193,7 @@ class Alunowin:
             self.alunoList.insert('','end',iid=count,values=(str(id),nome,idade,cpf,matricula,email,endereco))
             count = count + 1
     
-    def buscar(self):
+    def buscar(self,event):
         #deleta lista ao click
         self.alunoList.delete(*self.alunoList.get_children())
         
@@ -213,11 +216,11 @@ class Alunowin:
         self.emailEdit.delete(0, tk.END)
         self.enderecoEdit.delete(0, tk.END)
         self.buscaEdit.delete(0, tk.END)
-        
-        self.alunoList.insert('','end',values=(str(id),nome,idade,cpf,matricula,email,endereco))
-        self.buscaEdit.insert(0, 'Digite sua Matricula')
-        self.buscaEdit.configure(state=DISABLED)
-        self.buscaEdit.bind('<Button-1>', self._on_click)    
+        if (lista) !=0:
+            self.alunoList.insert('','end',values=(str(id),nome,idade,cpf,matricula,email,endereco))
+            self.buscaEdit.insert(0, 'Digite sua Matricula')
+            self.buscaEdit.configure(state=DISABLED)
+            self.buscaEdit.bind('<Button-1>', self._on_click)    
        
         
 
@@ -277,7 +280,8 @@ class Alunowin:
 
                 self.alunoList.item(self.alunoList.focus(), values=(str(id),nome,idade,cpf,matricula,email,endereco))
                  #remover a seleção
-                self.alunoList.selection_remove(self.alunoList.selection()[0])
+                #self.alunoList.selection_remove(self.alunoList.selection()[0])
+                self.carregar_dados_iniciais_treeView()
                 #----------#
                 mb.showinfo("Mensagem", "Alteração executada com sucesso.")
                 self.nomeEdit.delete(0, tk.END)
