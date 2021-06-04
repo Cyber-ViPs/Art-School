@@ -13,13 +13,7 @@ class Conexao:
             print(f"Erro ao conectar o banco de dados {db_path}.")
         return conexao
 
-    def search(nome="", idade="", cpf="", matricula="", email="", endereco=""):
-        conexao = Conexao()
-        conexao.conectar()
-        conexao.execute("SELECT * FROM aluno WHERE nome=? or idade=? or cpf=? or matricula=? or email=? or endereco=?", (nome,idade,cpf,matricula,email, endereco))
-        rows = conexao.fetchall()
-        conexao.disconnect()
-        return rows
+    
 
     def createTablealuno(self,conexao,cursor):
         cursor.execute('DROP TABLE IF EXISTS aluno')
@@ -29,7 +23,7 @@ class Conexao:
                     nome varchar NOT NULL,
                     idade varchar NOT NULL,
                     cpf bigint NOT NULL UNIQUE,
-                    matricula int NOT NULL,
+                    matricula int NOT NULL UNIQUE,
                     email varchar NOT NULL,
                     endereco varchar NOT NULL);"""
         
@@ -57,6 +51,7 @@ class Conexao:
             av2 double NOT NULL,
             av3 double NOT NULL,
             media DOUBLE NOT NULL,
+            situacao varchar,
             PRIMARY KEY (fk_aluno_id),
             FOREIGN KEY (fk_Aluno_id) REFERENCES aluno (id)
             FOREIGN KEY (fk_disciplina_id) REFERENCES disciplina (id));"""

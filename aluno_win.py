@@ -14,25 +14,26 @@ class Alunowin:
 
     def __init__(self,win,):
         self.alunoCRUD = Aluno()
-
+        vcmd = (win.register(self.no_str))
+        yes = (win.register(self.yes_str))
         #Criar os componentes de tela
         self.alunoed2Label = tk.Label(win, text='_______________', background='#292826',foreground='#F1780e')
         self.alunoedLabel = tk.Label(win, text='______________________________________',background='#292826',foreground='#F1780e')
         self.alunoLabel = tk.Label(win, text='ALUNO',font="Bold 17", background='#292826',foreground='#F1780e')
 
-        self.nomeLabel = tk.Label(win, text='Nome',font="Bold 10", background='#292826',foreground='#F1780e') 
-        self.nomeEdit = tk.Entry(width = 32, bd=1,bg='#dde')
+        self.nomeLabel = tk.Label(win, text='* Nome',font="Bold 10", background='#292826',foreground='#F1780e') 
+        self.nomeEdit = tk.Entry(width = 32, bd=1,bg='#dde',validate='all',validatecommand=(yes,'%S'))
 
         self.idadeLabel = tk.Label(win, text='Idade',font="Bold 10", background='#292826',foreground='#F1780e') 
-        self.idadeEdit = tk.Entry(width = 32, bd=1,bg='#dde')
+        self.idadeEdit = tk.Entry(width = 32, bd=1,bg='#dde',validate='all',validatecommand=(vcmd,'%P'))
 
-        self.cpfLabel = tk.Label(win, text='CPF',font="Bold 10", background='#292826',foreground='#F1780e') 
-        self.cpfEdit = tk.Entry(width = 32, bd=1,bg='#dde')
-
-        self.matriculaLabel = tk.Label(win, text='Matricula',font="Bold 10", background='#292826',foreground='#F1780e') 
-        self.matriculaEdit = tk.Entry(width = 32, bd=1,bg='#dde')
-
-        self.emailLabel = tk.Label(win, text='E-mail',font="Bold 10", background='#292826',foreground='#F1780e') 
+        self.cpfLabel = tk.Label(win, text='* CPF',font="Bold 10", background='#292826',foreground='#F1780e') 
+        self.cpfEdit = tk.Entry(width = 32, bd=1,bg='#dde',validate='all',validatecommand=(vcmd,'%P'))
+        
+        self.matriculaLabel = tk.Label(win, text='* Matricula',font="Bold 10", background='#292826',foreground='#F1780e') 
+        self.matriculaEdit = tk.Entry(width = 32, bd=1,bg='#dde',validate='all',validatecommand=(vcmd,'%P'))
+        
+        self.emailLabel = tk.Label(win, text='* E-mail',font="Bold 10", background='#292826',foreground='#F1780e') 
         self.emailEdit = tk.Entry(width = 32, bd=1,bg='#dde')
 
         self.enderecoLabel = tk.Label(win, text='Endereço',font="Bold 10", background='#292826',foreground='#F1780e') 
@@ -41,12 +42,11 @@ class Alunowin:
         # Boloes
         #------------#
         
-        
 
         self.buscaEdit = tk.Entry(width=85, bd=1,bg='#dde')
         self.buscaEdit.insert(0, 'Digite sua Matricula')
         self.buscaEdit.configure(state=DISABLED)
-        self.buscaEdit.bind('<Button-1>', self._on_click)
+        self.buscaEdit.bind('<Button-1>', self._on_click_placehold)
         self.buscaEdit.bind("<Return>",(lambda Event: self.buscar(self.buscaEdit.get())))
         
         #------------#
@@ -69,9 +69,6 @@ class Alunowin:
         self.btnExcluir = tk.Button(win, 
                 text = 'Excluir',bg='#dde', width = 7, command=self._on_deletar_clicked, bd=1)
         
-
-                
-
 
         self.alunoList = ttk.Treeview(win, columns=(1,2,3,4,5,6,7), show='headings')
         
@@ -107,19 +104,19 @@ class Alunowin:
         self.alunoedLabel.place(x=380,y=20)
         self.alunoLabel.place(x=440,y=50)
 
-        self.nomeLabel.place(x=170,y=130)
+        self.nomeLabel.place(x=161,y=130)
         self.nomeEdit.place(x=220,y=130)
         
         self.idadeLabel.place(x=170,y=160)
         self.idadeEdit.place(x=220,y=160)
 
-        self.emailLabel.place(x=170,y=190)
+        self.emailLabel.place(x=161,y=190)
         self.emailEdit.place(x=220,y=190)
 
-        self.cpfLabel.place(x=460,y=130)
+        self.cpfLabel.place(x=451,y=130)
         self.cpfEdit.place(x=530,y=130)
         
-        self.matriculaLabel.place(x=460,y=160)
+        self.matriculaLabel.place(x=451,y=160)
         self.matriculaEdit.place(x=530,y=160)
 
         self.enderecoLabel.place(x=460,y=190)
@@ -127,7 +124,7 @@ class Alunowin:
 
         self.buscaEdit.place(x=295,y=300)
         #--------
-        # Botoes
+        # Posicionamnto dos Botoes
         #--------
         self.btnlista.place(x=865,y=298)
         self.btnbusca.place(x=820,y=298)
@@ -141,16 +138,43 @@ class Alunowin:
         #--------
         # Funções
         #--------
+        
+    def no_str(self, P):
+        #somente numeros
+        if str.isdigit(P) or P=="":
+            return True
+        else:
+            return False
     
+    def yes_str(self, S):
+        #somente caracter
+        if str.isdigit(S):
+            return False
+        else:
+            return True
+
     
-    def _on_click(self, event):
+    def _on_click_placehold(self, event):
         self.buscaEdit.configure(state=NORMAL)
         self.buscaEdit.delete(0, END)
         janela.unbind('<Button-1>')
         #fazendo unbind com root da janela especificando exatamente qual
         # a funçao deve ser realizada o unbind nao teremos o erro de string
-       
     
+    def placehold(self): 
+        self.buscaEdit.insert(0, 'Digite sua Matricula')
+        self.buscaEdit.configure(state=DISABLED)
+        self.buscaEdit.bind('<Button-1>', self._on_click_placehold)
+
+    def delet_campos(self):
+        #deletar os campos dentros das Entry
+        self.nomeEdit.delete(0, tk.END)
+        self.idadeEdit.delete(0, tk.END)
+        self.cpfEdit.delete(0, tk.END)
+        self.matriculaEdit.delete(0, tk.END)
+        self.emailEdit.delete(0, tk.END)
+        self.enderecoEdit.delete(0, tk.END)
+        self.buscaEdit.delete(0, tk.END)      
 
     def _on_mostrar_clicked(self, event):
         #Seleção do usuario, linha na qual ele clicou
@@ -162,22 +186,18 @@ class Alunowin:
         matricula = item["values"][4]
         email = item["values"][5]
         endereco = item["values"][6]
-
-        self.nomeEdit.delete(0, tk.END)
+        self.placehold()
+        self.delet_campos()
         self.nomeEdit.insert(0, nome)
-        self.idadeEdit.delete(0, tk.END)
         self.idadeEdit.insert(0, idade)
-        self.cpfEdit.delete(0, tk.END)
         self.cpfEdit.insert(0, cpf)
-        self.matriculaEdit.delete(0, tk.END)
         self.matriculaEdit.insert(0, matricula)
-        self.emailEdit.delete(0, tk.END)
         self.emailEdit.insert(0, email)
-        self.enderecoEdit.delete(0, tk.END)
         self.enderecoEdit.insert(0, endereco)
 
     def carregar_dados_iniciais_treeView(self):
         self.alunoList.delete(*self.alunoList.get_children())
+        self.delet_campos()
         registro = self.alunoCRUD.consultar()
 
         count = 0
@@ -194,35 +214,33 @@ class Alunowin:
             count = count + 1
     
     def buscar(self,event):
-        #deleta lista ao click
-        self.alunoList.delete(*self.alunoList.get_children())
+        if self.buscaEdit.get()=="" or self.buscaEdit.get()==str('Digite sua Matricula'):
+            mb.showinfo("Erro","Digite sua Matricula no Campo Busca!")
         
-        #obtem a entrada digitada pelo usuario no campo busca e coloca em uma lista
-        lista = self.alunoCRUD.consultar_por_matricula(self.buscaEdit.get())
-        item = self.alunoList.selection()       
-        for item in lista:
-            id = item[0]
-            nome = item[1]
-            idade = item[2]
-            cpf   = item[3]
-            matricula = item[4]
-            email = item[5]
-            endereco = item[6]
-        #deleta os campos prenchidos do formulario
-        self.nomeEdit.delete(0, tk.END)
-        self.idadeEdit.delete(0, tk.END)
-        self.cpfEdit.delete(0, tk.END)
-        self.matriculaEdit.delete(0, tk.END)
-        self.emailEdit.delete(0, tk.END)
-        self.enderecoEdit.delete(0, tk.END)
-        self.buscaEdit.delete(0, tk.END)
-        if (lista) !=0:
-            self.alunoList.insert('','end',values=(str(id),nome,idade,cpf,matricula,email,endereco))
-            self.buscaEdit.insert(0, 'Digite sua Matricula')
-            self.buscaEdit.configure(state=DISABLED)
-            self.buscaEdit.bind('<Button-1>', self._on_click)    
-       
-        
+        else:
+                #deleta lista ao click
+                self.alunoList.delete(*self.alunoList.get_children())
+                
+                #obtem a entrada digitada pelo usuario no campo busca e coloca em uma lista
+                lista = self.alunoCRUD.consultar_por_matricula(self.buscaEdit.get())
+                item = self.alunoList.selection()       
+                for item in lista:
+                    id = item[0]
+                    nome = item[1]
+                    idade = item[2]
+                    cpf   = item[3]
+                    matricula = item[4]
+                    email = item[5]
+                    endereco = item[6]
+                #deleta os campos prenchidos do formulario
+                self.delet_campos()
+                try:
+                    self.alunoList.insert('','end',values=(str(id),nome,idade,cpf,matricula,email,endereco))
+                    self.placehold()
+                except:
+                    mb.showinfo("Erro", "Aluno nao cadastrado no banco de dados")
+                    self.placehold()
+                    self.carregar_dados_iniciais_treeView()
 
     def _on_cadastrar_clicked(self):
         #Recuperar os dados dos campos texto
@@ -234,34 +252,29 @@ class Alunowin:
         endereco = self.enderecoEdit.get()
 
         #Chamar o cadastrar do aluno.py para cadastrar no banco
-        if (email) !="":
-            if self.alunoCRUD.cadastrar(nome,idade,cpf,matricula,email,endereco):
-                numeroLinha = len(self.alunoList.get_children())
-                id_aluno = self.alunoCRUD.consultar_ultimo_id()
+        if self.cpfEdit.get()=="" or self.nomeEdit.get()=="":
+                mb.showinfo("Campos em branco","Os campos com ( * ) não podem ficar vazio")
                 
-                
-                self.alunoList.insert('','end',numeroLinha,values=(str(id_aluno),nome,idade,cpf,matricula,email,endereco))
-
-                #Mostrar mensagem para usuário
-                mb.showinfo("Mensagem", "Cadastro executado com sucesso!")
-                
-                #Limpar os campos texto
-                self.nomeEdit.delete(0,tk.END)
-                self.idadeEdit.delete(0, tk.END)
-                self.cpfEdit.delete(0, tk.END)
-                self.matriculaEdit.delete(0, tk.END)
-                self.emailEdit.delete(0, tk.END)
-                self.enderecoEdit.delete(0, tk.END)
-        
-        else:
-            mb.showinfo("Mensagem", "Erro no cadastro!")
-            #Retornando o foco
-            self.nomeEdit.focus_set()
-            self.idadeEdit.focus_set()
-            self.cpfEdit.focus_set()
-            self.matriculaEdit.focus_set()
-            self.emailEdit.focus_set()
-            self.enderecoEdit.focus_set()
+        else: 
+                if self.alunoCRUD.cadastrar(nome,idade,cpf,matricula,email,endereco):
+                    numeroLinha = len(self.alunoList.get_children())
+                    id_aluno = self.alunoCRUD.consultar_ultimo_id()
+                    self.alunoList.insert('','end',numeroLinha,values=(str(id_aluno),nome,idade,cpf,matricula,email,endereco))
+                        #Mostrar mensagem para usuário
+                    mb.showinfo("Mensagem", "Cadastro executado com sucesso!")
+                        
+                        #Limpar os campos texto
+                    self.delet_campos()
+                    
+                else:
+                    mb.showinfo("Mensagem", "Erro no cadastro!")
+                    #Retornando o foco
+                    self.nomeEdit.focus_set()
+                    self.idadeEdit.focus_set()
+                    self.cpfEdit.focus_set()
+                    self.matriculaEdit.focus_set()
+                    self.emailEdit.focus_set()
+                    self.enderecoEdit.focus_set()
 
 
     def _on_atualizar_clicked(self):
@@ -280,16 +293,10 @@ class Alunowin:
 
                 self.alunoList.item(self.alunoList.focus(), values=(str(id),nome,idade,cpf,matricula,email,endereco))
                  #remover a seleção
-                #self.alunoList.selection_remove(self.alunoList.selection()[0])
                 self.carregar_dados_iniciais_treeView()
                 #----------#
                 mb.showinfo("Mensagem", "Alteração executada com sucesso.")
-                self.nomeEdit.delete(0, tk.END)
-                self.idadeEdit.delete(0, tk.END)
-                self.cpfEdit.delete(0, tk.END)
-                self.matriculaEdit.delete(0, tk.END)
-                self.emailEdit.delete(0, tk.END)
-                self.enderecoEdit.delete(0, tk.END)
+                self.delet_campos()
             else:
                 mb.showinfo("Mensagem", "Erro na alteração.")
                 self.nomeEdit.focus_set()
@@ -304,12 +311,7 @@ class Alunowin:
                 self.alunoList.delete(linhaSelecionada)
                 
                 mb.showinfo("Mensagem", "Exclusão executada com sucesso.")
-                self.nomeEdit.delete(0, tk.END)
-                self.idadeEdit.delete(0, tk.END)
-                self.cpfEdit.delete(0, tk.END)
-                self.matriculaEdit.delete(0, tk.END)
-                self.emailEdit.delete(0, tk.END)
-                self.enderecoEdit.delete(0, tk.END)
+                self.delet_campos()
             else:
                 mb.showinfo("Mensagem", "Erro na exclusão.")
                 self.nomeEdit.focus_set()

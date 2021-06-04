@@ -42,6 +42,20 @@ class Aluno:
         conexao.close()
         return resultset
 
+    def buscar(self,name):
+        conn = Conexao()
+        conexao = conn.conectar()
+        cursor = conexao.cursor()
+         
+        
+        try:
+            resultset = cursor.execute('SELECT * FROM aluno WHERE nome LIKE '%' ORDER BY nome', (name,)).fetchall()
+        except Error as e:
+            print(f"O erro '{e}' ocorreu.")
+            
+        cursor.close()
+        conexao.close()
+        return resultset
     
     def consultar_detalhes(self, id_aluno):
         conn = Conexao()
